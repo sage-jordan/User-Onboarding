@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Field, withFormik } from 'formik';
-import { __values } from 'tslib';
 import * as Yup from 'yup';
 import axios from 'axios';
 
@@ -13,7 +12,7 @@ function LoginForm({ errors, touched, values, status}) {
             setUsers([...users, status]);
         }
     }, [status]);
-
+    console.log(users);
     return (
         <Form>
             <Field type="text" name="name" placeholder="Name" />
@@ -28,7 +27,7 @@ function LoginForm({ errors, touched, values, status}) {
                 {touched.terms && errors.terms && <p>{errors.terms}</p>}
                 <span className="checkmark" />
             </label>
-            <button>Submit!</button>
+            <button type="submit">Submit!</button>
             {users.map(user => (
                 <p key={user.id}>{user.name}</p>
             ))}
@@ -37,6 +36,7 @@ function LoginForm({ errors, touched, values, status}) {
 }
 
 const FormikLoginForm = withFormik({
+
     mapPropsToValues({ name, email, password, terms }) {
         return {
             name: name || "",
@@ -45,13 +45,18 @@ const FormikLoginForm = withFormik({
             terms: terms || ""
         };
     },
-    handleSubmit(values) {
+
+    handleSubmit(values, {setStatus}) {
         console.log(values);
         axios
             .post("https://reqres.in/api/users", values)
-            .then(res => console.log(res))
+            .then(res => {
+                console.log(res);
+                setStatus(res.data);
+            })
             .catch(err => console.log(err));
     },
+    
     validationSchema: Yup.object().shape({
         name: Yup.string()
             .required("Name is required!"),
