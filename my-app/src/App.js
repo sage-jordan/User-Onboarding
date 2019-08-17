@@ -1,14 +1,12 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import MyForm from './MyForm';
+import './index.css';
 
-function App() {
+
+export default function App() {
     return (
-        <div>
+        <div className="form">
             <MyForm/>
         </div>
     )
 }
-
-const rootElement = document.getElementById('root');
-ReactDOM.render(<App/>, rootElement);
